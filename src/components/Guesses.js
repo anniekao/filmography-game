@@ -1,20 +1,17 @@
 import React from 'react'
+import { v4 as uuid } from 'uuid'
+import FilmDetail from './FilmDetail'
+import ListGroup from 'react-bootstrap/ListGroup'
 
 const Guesses = ({ guessCounter, guesses }) => {
-  // Annoyingly, some objects in the filmography have the key 'Role' and sometime it's 'Role(s)
-  // Checking to see which it is and then setting it to use in displaying the role info
-  let whichRole = guesses.length > 0 && guesses[0]['Role'] ? 'Role' : 'Role(s)'
-
   return (
-    <div>
-      Films guessed so far: {guessCounter}
-      {guesses.map(guess => {
-        return (
-          <p key={guess.Title.text}>
-            {guess.Title.text} {guess.Year.text} ({guess[whichRole].text})
-          </p>
-        )
-      })}
+    <div className='guesses-container'>
+      Number of films guessed: {guessCounter}
+      <ListGroup>
+        {guesses.map(guess => (
+          <FilmDetail key={uuid()} film={guess} />
+        ))}
+      </ListGroup>
     </div>
   )
 }
