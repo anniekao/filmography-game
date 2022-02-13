@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import wtf from 'wtf_wikipedia'
 import GuessForm from './components/GuessForm'
 import FilmList from './components/FilmList'
@@ -9,6 +9,8 @@ import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
+import Togglable from './components/Togglable'
+import Collapse from 'react-bootstrap/Collapse'
 
 const actors = [
   "Keanu Reeves",
@@ -18,19 +20,18 @@ const actors = [
   "Ethan Hawke",
   "John C. Reilly",
   // "Elle Fanning",
-  "Kurt Russell",
-  "Daniel Day-Lewis",
-  "Morgan Freeman",
-  "Al Pacino",
-  "Harrison Ford",
-  "Tilda Swinton",
-  "Meg Ryan",
-  "Julianne Moore",
-  "Sandra Bullock",
-  "Willem Dafoe",
+  // "Kurt Russell",
+  // "Daniel Day-Lewis",
+  // "Morgan Freeman",
+  // "Al Pacino",
+  // "Harrison Ford",
+  // "Tilda Swinton",
+  // "Meg Ryan",
+  // "Sandra Bullock",
+  // "Willem Dafoe",
   "Meryl Streep",
-  "Gary Oldman",
-  "Nicolas Cage"
+  // "Gary Oldman",
+  // "Nicolas Cage"
 ]
 
 const App = () => {
@@ -41,6 +42,10 @@ const App = () => {
   const [showFilmography, setShowFilmography] = useState(false)
   const [actorName, setActorName] = useState('')
   const [actorImgUrl, setActorImgUrl] = useState('')
+  const [errorMsg, setErrorMsg] = useState(null)
+  const [isCollapsed, setIsCollapsed] = useState(false)
+
+  const startGameToggle = useRef()
 
   // Get filmography on load
   useEffect(() => {
@@ -96,6 +101,10 @@ const App = () => {
     })
     if (alreadyGuessed) {
       console.log("You already guessed that one. Try again.")
+      setErrorMsg('You already guessed that one. Try a different film.')
+      setTimeout(() => {
+        setErrorMsg(null)
+      }, 5000)
     } else {
       const found = filmography.find(({ Title }) => Title.text.toLowerCase() === guess.toLowerCase())
       setGuess('')
@@ -106,8 +115,16 @@ const App = () => {
         console.log("GUESSES SO FAR", guesses)
       } else {
         console.log("EHHHH try again!")
+        setErrorMsg(`Haven't heard of that film. Maybe try the full title or add 'The' ?`)
+        setTimeout(() => {
+          setErrorMsg(null)
+        }, 5000)
       }    
     }
+  }
+
+  const handleStartToggle = () => {
+    startGameToggle.current.toggle()
   }
 
   const handleGiveUp = (event) => {
@@ -115,13 +132,10 @@ const App = () => {
     setShowFilmography(true)
   }
 
-  const resetGame = (event) => {
-    event.preventDefault()
-    window.location.reload(false)
-  }
-
-  const hide = { display: showFilmography ? '' : 'none' }
-  const show = { display: showFilmography ? 'none' : ''}
+  // const resetGame = (event) => {
+  //   event.preventDefault()
+  //   window.location.reload(false)
+  // }
 
   return (
     <Container>
@@ -133,45 +147,42 @@ const App = () => {
         <Alert variant={'light'}>
           <p>
             This mini game is based on the first round of the card game
-            <a href='https://www.cinephilegame.com' target='_new'> Cinephile</a>. 
+            <a href='https://www.cinephilegame.com' target='_new'> Cinephile</a> (no relation, please don't sue me). 
           </p>
           <p>
             The goal is to <span className='bold'>name as many films by an actor</span>, so maybe next time you play Cinephile 
             with your friends, you won't draw a blank on films with say...Tilda Swinton.
           </p>
           <p>
-            The title can be in upper or lower case, but it has to be <span className='bold'>the exact film title</span>.
-            I know, I know, but them's the rules.
+            The title can be in upper or lower case, but it has to be <span className='bold'>the exact film title</span>. 
+            For example, Speed 2 would be a wrong answer because the actual title is Speed 2: Cruise Control.
+            I know, I know, that movie is terrible and so is this rule.
           </p>
-          <Button variant={'dark'}>Ready? Let's Go.</Button>
+          <Button variant={'dark'} onClick={handleStartToggle}>Ready? Let's Go.</Button>
         </Alert>
-        { actorImgUrl && 
+        <Togglable toggleState={false} ref={startGameToggle}>
           <Alert variant={'primary'}>
-            <div className='avatar-img'>
-              <img 
-                className='avatar-sm rounded-circle'
-                src={actorImgUrl}
-                alt={`${actorName}`} />
-            </div>
-            <div className='details'>
-              <div>{actorName}</div>
-              <div>Number of films guessed: {guessCounter}</div>
-            </div>
-            { guesses && <FilmList films={guesses} /> }
-          </Alert>
-      }
-        <div style={show}>
+              <div className='avatar-img'>
+                <img 
+                  className='avatar-sm rounded-circle'
+                  src={actorImgUrl}
+                  alt={`${actorName}`} />
+              </div>
+              <div className='details'>
+                <div>You've guessed {guessCounter} {actorName} film(s).</div>
+              </div>
+              {errorMsg && <Alert variant={'danger'}>{errorMsg}</Alert>}
+              { guesses && <FilmList films={guesses} /> }
+            </Alert>
+      
           <GuessForm 
             handleGiveUp={handleGiveUp} 
             handleGuess={handleGuess} 
             guess={guess} 
             setGuess={setGuess}   
           />
-        </div>
-        <div style={hide}>
-          <button type='button' onClick={resetGame}>New actor</button>
-          {filmography && <FilmList films={filmography} /> }
-        </div>
+        </Togglable>
+    
         </Col>
         {/* column for layout */}
         <Col></Col>
