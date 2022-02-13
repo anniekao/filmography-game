@@ -25,13 +25,13 @@ const actors = [
   // "Morgan Freeman",
   // "Al Pacino",
   // "Harrison Ford",
-  // "Tilda Swinton",
-  // "Meg Ryan",
-  // "Sandra Bullock",
-  // "Willem Dafoe",
+  "Tilda Swinton",
+  "Meg Ryan",
+  "Sandra Bullock",
+  "Willem Dafoe",
   "Meryl Streep",
   // "Gary Oldman",
-  // "Nicolas Cage"
+  "Nicolas Cage"
 ]
 
 const App = () => {
@@ -45,6 +45,7 @@ const App = () => {
   const [showGame, setShowGame] = useState(false)
   const [showInfoBox, setShowInfoBox] = useState(true)
   const [showFilmographyModal, setShowFilmographyModal] = useState(false)
+  const [prevScore, setPrevScore] = useState(null)
 
   const startGameToggle = useRef()
   const infoBoxToggle = useRef()
@@ -92,6 +93,15 @@ const App = () => {
     fetchActorImg()
   }, [actorName])
 
+  // Get previous best score
+  const getBestScore = () => {
+    const scoreJSON = window.localStorage.getItem('score')
+    if (scoreJSON) {
+      const score = JSON.parse(scoreJSON)
+      setPrevScore(score)
+    }
+  }
+
   const handleGuess = (event) => {
     event.preventDefault()
     console.log('GUESSING...')
@@ -134,12 +144,25 @@ const App = () => {
 
   const handleGiveUp = (event) => {
     event.preventDefault()
+    // TODO: look for old score, if old score, compare with current
+    // if new best score, replace old local storage item wit the new one
     setShowFilmographyModal(true)
   }
 
-  // const resetGame = (event) => {
-  //   event.preventDefault()
-  //   window.location.reload(false)
+  const resetGame = (event) => {
+    console.log('RESETTING...')
+    event.preventDefault()
+    setShowFilmographyModal(false)
+    window.location.reload(false)
+    handleStartToggle()
+  }
+
+  // const filmographyWithoutGuesses = () => {
+  //   return filmography.filter(film => {
+  //     if (!guesses.find(film.Title.text)) {
+  //       return film
+  //     }
+  //   })
   // }
 
   return (
@@ -167,14 +190,16 @@ const App = () => {
                 with your friends, you won't draw a blank on films with say...Tilda Swinton.
               </p>
               <p>
-                The title can be in upper or lower case, but it has to be <span className='bold'>the exact film title</span>. 
-                For example, Speed 2 would be a wrong answer because the actual title is Speed 2: Cruise Control.
+                The <span className='bold'>title can be in upper or lower case</span>, but it has to be <span className='bold'>the full official film title</span>. 
+              </p>
+              <p>
+                <span className='bold'>Example:</span> Speed 2 would be a wrong answer because the actual title is Speed 2: Cruise Control.
                 I know, I know, that movie is terrible and so is this rule.
               </p>
-              <Button variant={'dark'} onClick={handleStartToggle}>Ready? Let's Go.</Button>
+              <Button variant={'dark'} onClick={handleStartToggle}>{ showGame ? 'Close' : `Ready? Let's Go.`}</Button>
             </Alert>
           </CSSTransition>
-        </Togglable>
+        </Togglable> 
         <Togglable toggleState={false} ref={startGameToggle}>
           <CSSTransition 
             in={showGame} 
@@ -219,18 +244,17 @@ const App = () => {
           <Modal.Footer>
             <Button 
               variant={'secondary'} 
-              onClick={() => setShowFilmographyModal(false)}
+              onClick={(event) => resetGame(event)}
             >
               Close
             </Button>
             <Button
               variant={'primary'}
-              onClick={handleGiveUp}
+              onClick={resetGame}
             >
               Play Again?
             </Button>
-          </Modal.Footer>
-          
+          </Modal.Footer>  
         </Modal>
         </Col>
         {/* column for layout */}
