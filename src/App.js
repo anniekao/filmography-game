@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import wtf from 'wtf_wikipedia'
-import axios from 'axios'
 import GuessForm from './components/GuessForm'
 import FilmList from './components/FilmList'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Alert from 'react-bootstrap/Alert'
-import Image from 'react-bootstrap/Image'
+import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
@@ -15,23 +14,23 @@ const actors = [
   "Keanu Reeves",
   // Chalamet doesn't have a filmography page yet
   // "Tom Hanks",
-  // "Winona Ryder",
-  // "Gary Oldman",
-  // "Ethan Hawke",
-  // "John C. Reilly",
+  "Winona Ryder",
+  "Ethan Hawke",
+  "John C. Reilly",
   // "Elle Fanning",
-  // "Kurt Russell",
-  // "Daniel Day-Lewis",
-  // "Morgan Freeman",
-  // "Al Pacino",
+  "Kurt Russell",
+  "Daniel Day-Lewis",
+  "Morgan Freeman",
+  "Al Pacino",
   "Harrison Ford",
   "Tilda Swinton",
-  // "Meg Ryan",
-  // "Julianne Moore",
+  "Meg Ryan",
+  "Julianne Moore",
   "Sandra Bullock",
   "Willem Dafoe",
   "Meryl Streep",
-  "Gary Oldman"
+  "Gary Oldman",
+  "Nicolas Cage"
 ]
 
 const App = () => {
@@ -46,7 +45,7 @@ const App = () => {
   // Get filmography on load
   useEffect(() => {
     console.log("USEEFFECT")
-    const random = Math.round(Math.random() * (actors.length))
+    const random = Math.round(Math.random() * (actors.length - 1))
     console.log("RANDOM", random)
     const actor = actors[random]
     setActorName(actor)
@@ -78,17 +77,6 @@ const App = () => {
           wtf.fetch(actorName).then(doc => {
             setActorImgUrl(doc.images()[0].thumbnail())
           })
-          // console.log(actorData.images(0).thumb())
-          // const wikiId = actorData._wikidata
-          // const wikiMetadata = await axios
-          //   .get(`https://www.wikidata.org/wiki/Special:EntityData/${wikiId}.json`)
-          // const imgFilename= wikiMetadata.data['entities'][`${wikiId}`]['claims']['P18'][0]['mainsnak']['datavalue']['value']
-          // console.log('IMG FILENAME', imgFilename)
-          // const imgFileInfo = await axios
-          //   .get(`https://en.wikipedia.org/w/api.php?action=query&titles=File:${imgFilename}&prop=imageinfo&iiurlwidth=500&format=json&origin=*`)
-          // const imgUrl = imgFileInfo.data['query']['pages']['-1']['imageinfo'][0]['url']
-          // console.log('IMG URL', imgUrl)
-          // setActorImgUrl(imgUrl)
         } catch(err) {
           console.log(err)
         }
@@ -141,7 +129,22 @@ const App = () => {
         {/* column for layout */}
         <Col></Col>
         <Col xs={6}>
-        <h1 className='header'>Cinephile Trainer</h1>
+        <h1 className='header'>Cinephile Filmography Game</h1>
+        <Alert variant={'light'}>
+          <p>
+            This mini game is based on the first round of the card game
+            <a href='https://www.cinephilegame.com' target='_new'> Cinephile</a>. 
+          </p>
+          <p>
+            The goal is to <span className='bold'>name as many films by an actor</span>, so maybe next time you play Cinephile 
+            with your friends, you won't draw a blank on films with say...Tilda Swinton.
+          </p>
+          <p>
+            The title can be in upper or lower case, but it has to be <span className='bold'>the exact film title</span>.
+            I know, I know, but them's the rules.
+          </p>
+          <Button variant={'dark'}>Ready? Let's Go.</Button>
+        </Alert>
         { actorImgUrl && 
           <Alert variant={'primary'}>
             <div className='avatar-img'>
@@ -150,10 +153,10 @@ const App = () => {
                 src={actorImgUrl}
                 alt={`${actorName}`} />
             </div>
-            <div>
-              Actor: {actorName}
+            <div className='details'>
+              <div>{actorName}</div>
+              <div>Number of films guessed: {guessCounter}</div>
             </div>
-            Number of films guessed: {guessCounter}
             { guesses && <FilmList films={guesses} /> }
           </Alert>
       }
