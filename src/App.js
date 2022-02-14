@@ -13,6 +13,7 @@ import { CSSTransition } from 'react-transition-group'
 import { getBestScore } from './utils/utils'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
+import { useTitle } from './hooks/useTitle'
 
 const actors = [
   'Keanu Reeves',
@@ -52,6 +53,9 @@ const App = () => {
 
   const startGameToggle = useRef()
   const infoBoxToggle = useRef()
+
+  // Set page title
+  useTitle('Cinefile Filmography')
 
   // Get filmography on load
   useEffect(() => {
