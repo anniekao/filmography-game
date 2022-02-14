@@ -10,8 +10,10 @@ import Row from 'react-bootstrap/Row'
 import Modal from 'react-bootstrap/Modal'
 import Togglable from './components/Togglable'
 import { CSSTransition } from 'react-transition-group'
+import { getBestScore } from './utils/utils'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
+
 const actors = [
   "Keanu Reeves",
   "Winona Ryder",
@@ -46,7 +48,7 @@ const App = () => {
   const [showGame, setShowGame] = useState(false)
   const [showInfoBox, setShowInfoBox] = useState(true)
   const [showFilmographyModal, setShowFilmographyModal] = useState(false)
-  const [bestScore, setBestScore] = useState(null)
+  const [bestScore, setBestScore] = useState({})
 
   const startGameToggle = useRef()
   const infoBoxToggle = useRef()
@@ -78,7 +80,6 @@ const App = () => {
     async function fetchActorImg() {
       if (actorName) {
         try{
-          // const actorData = await wtf.fetch(actorName)
           wtf.fetch(actorName).then(doc => {
             setActorImgUrl(doc.images()[0].thumbnail())
           })
@@ -125,29 +126,14 @@ const App = () => {
     setShowInfoBox(false)
   }
 
-  const getBestScore = () => {
-    const prevBestScore = JSON.parse(window.localStorage.getItem('score'))
-    const currScore = { score: guessCounter, actor: actorName }
-    if (prevBestScore) {
-      if (currScore.score > prevBestScore.score && currScore.actor !== prevBestScore.actor) {
-        window.localStorage.setItem('score', JSON.stringify(currScore))
-        setBestScore(currScore)
-      } else if (prevBestScore.score > currScore && currScore.actor === prevBestScore.actor) {
-        const score = { actorName, score: guessCounter }
-        setBestScore({ actorName, score: guessCounter})
-        window.localStorage.setItem('score', JSON.stringify(score))
-      } else {
-        setBestScore(prevBestScore)
-      }
-    } else if (guessCounter > 0 && !prevBestScore) {
-      setBestScore(currScore)
-      window.localStorage.setItem('score', JSON.stringify(currScore))
-    }
-  }
-
   const handleGiveUp = (event) => {
     event.preventDefault()
-    getBestScore()
+    let score
+    score = getBestScore({
+      score: guessCounter,
+      actor: actorName
+    })
+    setBestScore(score)
     setShowFilmographyModal(true)
   }
 
@@ -229,13 +215,11 @@ const App = () => {
               </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {bestScore && 
-              <Alert variant={'dark'}>
-                <h2>
-                  Your best score: {bestScore.score} {bestScore.actor} film(s)
-                </h2>
-              </Alert>
-            }
+            <Alert variant={'warning'}>
+              <h2>
+                Your best score: {bestScore.score} {bestScore.actor} films(s)
+              </h2>
+            </Alert>
             <Alert variant={'primary'}>
               <h2>{`${actorName}'s Filmography`}</h2>
               <FilmList films={filmography} />
