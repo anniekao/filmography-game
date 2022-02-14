@@ -1,11 +1,25 @@
-# Notes
-- started off by trying to get filmographies via Wikipedia pages, but realized quickly that 
-each filmography page has it's own formatting or the actor doesn't have a filmography page yet
- - tried using the Movie Database, but returns very limited filmographic information when querying an actor
- - one solution is to limit the list of actors to those with similiarly formatted Wikipedia filmographies, another is
- to check for Role vs. Roles in the filmography object keys and set it whenever needed -- hacky, I know
+# Intro
+This is a mini-game replicating the first round of the card game [Cinephile](https://www.cinephilegame.com/), where
+you and other players name as many films starring a particular actor. This is a single player version, so you can train for
+when you play with your friends and maybe you won't fail so badly at naming films starring say...Tilda Swinton.
+
+Disclaimer: I'm just a movie lover, who recently bought this for a friend and loved playing it. I'm not in any way affiliated with Cinephile.
+
+# Running the game
+Clone the repo and cd into it, then run `npm start`. A browser window will automatically appear at `localhost:3000` and you can start playing.
+
+# Wiki issues
+- started off by fetching filmographies directly from Wikipedia and saw how difficult it is to parse some information for the returned objects.
+Thankfully there's the ['wtf wikipedia'](https://github.com/spencermountain/wtf_wikipedia/) library for parsing these objects  
+- not all actors have filmography pages
+- not all existing filmography pages are formatted the same way
+  - one solution is to limit the list of actors to those with similiarly formatted Wikipedia filmographies
+  - the current soution is to check for Role vs. Roles in the filmography object keys and set it whenever needed -- hacky, I know
+- as an alternative to Wikipedia, I thought about using [The Movie Database(TMDB)'s API](https://developers.themoviedb.org/), but found this
+didn't return full filmographies. I believe the same applies to the [The Open Movie Database](http://www.omdbapi.com/).
 
  # Design Todo's
+[] have 'actors' object in a JSON file elsewhere
 [] fix fetching filmographies for Tom Cruise/Tom Hanks/actors with filmography objects that don't conform with the current logic
 or who don't have filmography pages (e.g. Timothee Chalamet)
 [x] add counter
@@ -35,6 +49,8 @@ or who don't have filmography pages (e.g. Timothee Chalamet)
 - have answers with 'The' in the title right without or without 'The', e.g. 'The Last Starfighter' === 'Last Starfighter'
 
 # Stretch Goals
+[] - launch on Heroku
+[] - multiplayer (Webhooks?)
 [] - query the Movie Database for movie info and have it appear in a modal
 [] - display film trivia
 
