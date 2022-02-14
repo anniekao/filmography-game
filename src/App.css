@@ -5,14 +5,9 @@ html, body {
 }
 
 body {
-  padding: 5em;
+  padding-top: 5em;
   font-family: 'Roboto Serif', 'Georgia', serif;
-}
-
-.header {
-  color: #FEFEFE;
-  font-weight: 800;
-  margin-bottom: 1em;
+  text-align: center;
 }
 
 p {
@@ -33,6 +28,12 @@ input {
 label {
   color: #FEFEFE;
   font-weight: 400;
+}
+
+.header {
+  color: #FEFEFE;
+  font-weight: 800;
+  margin-bottom: 1em;
 }
 
 .container {

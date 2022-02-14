@@ -19,6 +19,7 @@ Thankfully there's the ['wtf wikipedia'](https://github.com/spencermountain/wtf_
 didn't return full filmographies. I believe the same applies to the [The Open Movie Database](http://www.omdbapi.com/).
 
  # Design Todo's
+[] add responsiveness
 [] have 'actors' object in a JSON file elsewhere
 [] fix fetching filmographies for Tom Cruise/Tom Hanks/actors with filmography objects that don't conform with the current logic
 or who don't have filmography pages (e.g. Timothee Chalamet)

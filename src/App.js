@@ -148,101 +148,101 @@ const App = () => {
       <Row>
         {/* column for layout */}
         <Col></Col>
-        <Col xs={6}>
-        <h1 className='header'>Cinephile Filmography Game</h1>
-        <Togglable toggleState={true} ref={infoBoxToggle}>
-          <CSSTransition
-            in={showInfoBox}
-            classNames='toggle-out'
-            timeout={200}
-            unmountOnExit
-            onExited={() => setShowInfoBox(true)}
-          >
-            <Alert variant={'light'}>
-              <p>
-                This mini game is based on the first round of the card game
-                <a href='https://www.cinephilegame.com' target='_new'> Cinephile</a> (no relation, please don't sue me). 
-              </p>
-              <p>
-                The goal is to <span className='bold'>name as many films in an actor's filmography</span> as you can.
-                The <span className='bold'>title can be in upper or lower case</span>, but it has to be <span className='bold'>the full official film title</span>. 
-              </p>
-              <p>
-                <span className='bold'>Example:</span> Speed 2 would be a wrong answer because the actual title is Speed 2: Cruise Control.
-                I know, I know, that movie is terrible and so is this rule.
-              </p>
-              <Button variant={'dark'} onClick={handleStartToggle}>{ showGame ? 'Close' : `Ready? Let's Go.`}</Button>
-            </Alert>
-          </CSSTransition>
-        </Togglable> 
-        <Togglable toggleState={false} ref={startGameToggle}>
-          <CSSTransition 
-            in={showGame} 
-            classNames='toggle-in' 
-            timeout={200}
-            onExited={() => setShowGame(false)}
-          >
-            <Alert variant={'primary'}>
-                <div className='avatar-img'>
-                  <img 
-                    className='avatar-sm rounded-circle'
-                    src={actorImgUrl}
-                    alt={`${actorName}`} />
-                </div>
-                <div className='details'>
-                  <div>You've guessed {guessCounter} {actorName} film(s).</div>
-                </div>
-                {errorMsg && <Alert variant={'danger'}>{errorMsg}</Alert>}
-                { guesses && <FilmList films={guesses} /> }
-              </Alert>
-          </CSSTransition>
-          <GuessForm 
-            handleGiveUp={handleGiveUp} 
-            handleGuess={handleGuess} 
-            guess={guess} 
-            setGuess={setGuess}   
-          />
-        </Togglable>
-        <Modal 
-          show={showFilmographyModal} 
-          onHide={() => resetGame()}
-          size={'lg'}
-          scrollable
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>
-              {`You guessed ${guessCounter} / ${filmography ? filmography.length : 0} films`}
-              </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Alert variant={'warning'}>
-              <h2>
-                Your best score: {bestScore.score} {bestScore.actor} films(s)
-              </h2>
-            </Alert>
-            <Alert variant={'primary'}>
-              <h2>{`${actorName}'s Filmography`}</h2>
-              <FilmList films={filmography} />
-            </Alert>
-          </Modal.Body>
-          <Modal.Footer 
-            style={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Button
-              variant={'primary'}
-              onClick={resetGame}
+        <Col lg={6}>
+          <h1 className='header'>Cinephile Filmography Game</h1>
+          <Togglable toggleState={true} ref={infoBoxToggle}>
+            <CSSTransition
+              in={showInfoBox}
+              classNames='toggle-out'
+              timeout={200}
+              unmountOnExit
+              onExited={() => setShowInfoBox(true)}
             >
-              Play Again?
-            </Button>
-          </Modal.Footer>  
-        </Modal>
+              <Alert variant={'light'}>
+                <p>
+                  This mini game is based on the first round of the card game
+                  <a href='https://www.cinephilegame.com' target='_new'> Cinephile</a> (no relation, please don't sue me). 
+                </p>
+                <p>
+                  The goal is to <span className='bold'>name as many films in an actor's filmography</span> as you can.
+                  The <span className='bold'>title can be in upper or lower case</span>, but it has to be <span className='bold'>the full official film title</span>. 
+                </p>
+                <p>
+                  <span className='bold'>Example:</span> Speed 2 would be a wrong answer because the actual title is Speed 2: Cruise Control.
+                  I know, I know, that movie is terrible and so is this rule.
+                </p>
+                <Button variant={'dark'} onClick={handleStartToggle}>{ showGame ? 'Close' : `Ready? Let's Go.`}</Button>
+              </Alert>
+            </CSSTransition>
+          </Togglable> 
+          <Togglable toggleState={false} ref={startGameToggle}>
+            <CSSTransition 
+              in={showGame} 
+              classNames='toggle-in' 
+              timeout={200}
+              onExited={() => setShowGame(false)}
+            >
+              <Alert variant={'primary'}>
+                  <div className='avatar-img'>
+                    <img 
+                      className='avatar-sm rounded-circle'
+                      src={actorImgUrl}
+                      alt={`${actorName}`} />
+                  </div>
+                  <div className='details'>
+                    <div>You've guessed {guessCounter} {actorName} film(s).</div>
+                  </div>
+                  {errorMsg && <Alert variant={'danger'}>{errorMsg}</Alert>}
+                  { guesses && <FilmList films={guesses} /> }
+                </Alert>
+            </CSSTransition>
+            <GuessForm 
+              handleGiveUp={handleGiveUp} 
+              handleGuess={handleGuess} 
+              guess={guess} 
+              setGuess={setGuess}   
+            />
+          </Togglable>
         </Col>
         {/* column for layout */}
         <Col></Col>
       </Row>
+      <Modal 
+        show={showFilmographyModal} 
+        onHide={() => resetGame()}
+        size={'lg'}
+        scrollable
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {`You guessed ${guessCounter} / ${filmography ? filmography.length : 0} films`}
+            </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Alert variant={'warning'}>
+            <h2>
+              Your best score: {bestScore.score} {bestScore.actor} films(s)
+            </h2>
+          </Alert>
+          <Alert variant={'primary'}>
+            <h2>{`${actorName}'s Filmography`}</h2>
+            <FilmList films={filmography} />
+          </Alert>
+        </Modal.Body>
+        <Modal.Footer 
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Button
+            variant={'primary'}
+            onClick={resetGame}
+          >
+            Play Again?
+          </Button>
+        </Modal.Footer>  
+      </Modal>
     </Container>
   );
 }
