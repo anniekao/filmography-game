@@ -11,32 +11,10 @@ import Modal from 'react-bootstrap/Modal'
 import Togglable from './components/Togglable'
 import { CSSTransition } from 'react-transition-group'
 import { getBestScore } from './utils/utils'
+import { useTitle } from './hooks/useTitle'
+import { actors } from './actorList'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
-import { useTitle } from './hooks/useTitle'
-
-const actors = [
-  'Keanu Reeves',
-  'Winona Ryder',
-  'Ethan Hawke',
-  'John C. Reilly',
-  'Elle Fanning',
-  'Kurt Russell',
-  'Daniel Day-Lewis',
-  'Morgan Freeman',
-  'Harrison Ford',
-  'Tilda Swinton',
-  'Meg Ryan',
-  'Sandra Bullock',
-  'Willem Dafoe',
-  'Meryl Streep',
-  'Gary Oldman',
-  'Nicolas Cage',
-  'Bill Murray',
-  'Joaquin Phoenix',
-  'Julia Roberts',
-  'Robert Downey Jr.'
-]
 
 const App = () => {
   const [filmography, setFilmography] = useState(null)
@@ -57,7 +35,7 @@ const App = () => {
   // Set page title
   useTitle('Cinefile Filmography')
 
-  // Get filmography on load
+  // Get filmography
   useEffect(() => {
     const random = Math.round(Math.random() * (actors.length - 1))
     const actor = actors[random]
@@ -79,7 +57,7 @@ const App = () => {
     fetchFilmography()
   }, [])
 
-  // Get actor image on load
+  // Get actor image
   useEffect(() => {
     async function fetchActorImg() {
       if (actorName) {
@@ -115,7 +93,7 @@ const App = () => {
         setGuessCounter(guessCounter + 1)
         setGuesses([...guesses, found])
       } else {
-        setErrorMsg('Haven\'t heard of that film. Maybe try the full title or add \'The\' ?')
+        setErrorMsg(`Haven't heard of "${guess}". Maybe try the full title or add "The" ?`)
         setTimeout(() => {
           setErrorMsg(null)
         }, 5000)

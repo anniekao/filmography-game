@@ -1,0 +1,22 @@
+export const actors = [
+  'Keanu Reeves',
+  'Winona Ryder',
+  'Ethan Hawke',
+  'John C. Reilly',
+  'Elle Fanning',
+  'Kurt Russell',
+  'Daniel Day-Lewis',
+  'Morgan Freeman',
+  'Harrison Ford',
+  'Tilda Swinton',
+  'Meg Ryan',
+  'Sandra Bullock',
+  'Willem Dafoe',
+  'Meryl Streep',
+  'Gary Oldman',
+  'Nicolas Cage',
+  'Bill Murray',
+  'Joaquin Phoenix',
+  'Julia Roberts',
+  'Robert Downey Jr.'
+]
